@@ -1,0 +1,53 @@
+<!-- idea run configuration migrated from netbeans action -->
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="{{ name }}" type="MavenRunConfiguration" factoryName="Maven">
+    <MavenSettings>
+      <option name="myGeneralSettings" />
+      <option name="myRunnerSettings">
+      {% if properties is defined and properties|length > 0 %}
+        <MavenRunnerSettings>
+          <option name="environmentProperties">
+            <map />
+          </option>
+          <option name="jreName" value="#USE_PROJECT_JDK" />
+          <option name="mavenProperties">
+            <map>
+            {% for property in properties %}
+              <entry key="{{ property.name }}" value="{{ property.value }}" />
+            {% endfor %}
+            </map>
+          </option>
+          <option name="passParentEnv" value="true" />
+          <option name="runMavenInBackground" value="true" />
+          <option name="skipTests" value="false" />
+          <option name="vmOptions" value="" />
+        </MavenRunnerSettings>
+      {% endif %}
+      </option>
+      <option name="myRunnerParameters">
+        <MavenRunnerParameters>
+          <option name="profiles">
+            <set />
+          </option>
+          <option name="goals">
+            <list>
+              {% for arg in args %}
+              <option value="{{ arg }}" />
+              {% endfor %}
+            </list>
+          </option>
+          <option name="profilesMap">
+            <map>
+            {% for profile in profiles %}
+              <entry key="{{ profile }}" value="true" />
+            {% endfor %}
+            </map>
+          </option>
+          <option name="resolveToWorkspace" value="false" />
+          <option name="workingDirPath" value="$PROJECT_DIR${%- if project.dirname -%}/{{ project.dirname }}{%- endif -%}" />
+        </MavenRunnerParameters>
+      </option>
+    </MavenSettings>
+    <method />
+  </configuration>
+</component>
