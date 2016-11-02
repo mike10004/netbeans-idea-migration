@@ -46,7 +46,7 @@ def convert_action(action, args):
         action['activatedProfiles'] = {
             'activatedProfile': []
         }
-    name = args.name_prefix + action['displayName']
+    name = args.name_prefix + action.get('displayName', action.get('actionName'))
     properties = action.get('properties') or {}
     config = {
         'basename': sanitize(name),
@@ -79,8 +79,12 @@ def main(args):
     _log.debug("transforming actions matching pattern %s", args.action_filter)
     num_transformed = 0
     for action in actions:
-        if fnmatch.fnmatch(action['displayName'], args.action_filter):
-            _log.debug("converting action %s", action['displayName'])
+        name = action.get('displayName', None) or action.get('actionName', None)
+        if name is None:
+            _log.warn("skipping malformed action with children %s", action.keys())
+            continue
+        if fnmatch.fnmatch(name, args.action_filter):
+            _log.debug("converting action %s", name)
             config = convert_action(action, args)
             output = run_config_template.render(config)
             if args.output_dir == '-':
